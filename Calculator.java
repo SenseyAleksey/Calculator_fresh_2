@@ -1,9 +1,11 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class Calculator {
+
     private static final Map<Character, Integer> romanToIntMap = new HashMap<>();
-    private static final Map<Integer, String> intToRomanMap = new HashMap<>();
+    private static final TreeMap<Integer, String> intToRomanMap = new TreeMap<>();
 
     static {
         romanToIntMap.put('I', 1);
@@ -54,8 +56,8 @@ public class Calculator {
         int number1 = isRoman ? romanToInt(num1) : Integer.parseInt(num1);
         int number2 = isRoman ? romanToInt(num2) : Integer.parseInt(num2);
 
-        if (number1 < 1 || number1 > 10 || number2 < 1 || number2 > 10) {
-            return "Числа должны быть в диапазоне от 1 до 10 включительно.";
+        if (number1 < 1 || number1 > 3999 || number2 < 1 || number2 > 3999) {
+            return "Числа должны быть в диапазоне от 1 до 3999 включительно.";
         }
 
         int result;
@@ -83,7 +85,7 @@ public class Calculator {
     }
 
     private static boolean isRomanNumeral(String s) {
-        return s.matches("[IVXLCDM]+");
+        return s.matches("^[IVXLCDM]+$");
     }
 
     private static boolean isArabicNumeral(String s) {
@@ -93,10 +95,8 @@ public class Calculator {
     private static int romanToInt(String roman) {
         int result = 0;
         int prevValue = 0;
-
         for (int i = roman.length() - 1; i >= 0; i--) {
             int value = romanToIntMap.get(roman.charAt(i));
-
             if (value < prevValue) {
                 result -= value;
             } else {
@@ -104,7 +104,6 @@ public class Calculator {
             }
             prevValue = value;
         }
-
         return result;
     }
 
@@ -114,10 +113,10 @@ public class Calculator {
         }
 
         StringBuilder roman = new StringBuilder();
-        for (Integer value : intToRomanMap.keySet()) {
-            while (num >= value) {
-                roman.append(intToRomanMap.get(value));
-                num -= value;
+        for (Integer key : intToRomanMap.descendingKeySet()) {
+            while (num >= key) {
+                roman.append(intToRomanMap.get(key));
+                num -= key;
             }
         }
 
