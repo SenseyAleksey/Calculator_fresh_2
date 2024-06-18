@@ -18,5 +18,6 @@
 
 Клонируйте репозиторий:
 git@github.com:SenseyAleksey/fresh_calc.git
+
 Java Calculator
 cd java-calculator
