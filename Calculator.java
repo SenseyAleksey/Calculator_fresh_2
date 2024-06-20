@@ -31,11 +31,11 @@ public class Calculator {
         intToRomanMap.put(1, "I");
     }
 
-    public static String calc(String input) {
+    public static String calc(String input) throws CalculatorException {
         String[] tokens = input.split(" ");
 
         if (tokens.length != 3) {
-            return "Некорректный формат ввода. Ожидается два операнда и один оператор.";
+            throw new CalculatorException("Некорректный формат ввода. Ожидается два операнда и один оператор.");
         }
 
         String num1 = tokens[0];
@@ -46,18 +46,18 @@ public class Calculator {
         boolean isArabic = isArabicNumeral(num1) && isArabicNumeral(num2);
 
         if (!isRoman && !isArabic) {
-            return "Числа должны быть либо римскими, либо арабскими.";
+            throw new CalculatorException("Числа должны быть либо римскими, либо арабскими.");
         }
 
         if (isRoman && isArabic) {
-            return "Нельзя использовать обе системы счисления одновременно.";
+            throw new CalculatorException("Нельзя использовать обе системы счисления одновременно.");
         }
 
         int number1 = isRoman ? romanToInt(num1) : Integer.parseInt(num1);
         int number2 = isRoman ? romanToInt(num2) : Integer.parseInt(num2);
 
         if (number1 < 1 || number1 > 3999 || number2 < 1 || number2 > 3999) {
-            return "Числа должны быть в диапазоне от 1 до 3999 включительно.";
+            throw new CalculatorException("Числа должны быть в диапазоне от 1 до 3999 включительно.");
         }
 
         int result;
@@ -73,12 +73,12 @@ public class Calculator {
                 break;
             case "/":
                 if (number2 == 0) {
-                    return "Деление на ноль невозможно.";
+                    throw new CalculatorException("Деление на ноль невозможно.");
                 }
                 result = number1 / number2;
                 break;
             default:
-                return "Некорректная операция: " + operator;
+                throw new CalculatorException("Некорректная операция: " + operator);
         }
 
         return isRoman ? intToRoman(result) : String.valueOf(result);
