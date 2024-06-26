@@ -1,1 +1,0 @@
-run = "javac Main.java Calculator.java CalculatorException.java && java Main"
