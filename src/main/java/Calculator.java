@@ -1,9 +1,10 @@
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Calculator {
     private static final Map<Character, Integer> romanToIntMap = new HashMap<>();
-    private static final Map<Integer, String> intToRomanMap = new HashMap<>();
+    private static final Map<Integer, String> intToRomanMap = new LinkedHashMap<>();
 
     static {
         romanToIntMap.put('I', 1);
@@ -44,7 +45,7 @@ public class Calculator {
         boolean isArabic = isArabicNumeral(num1) && isArabicNumeral(num2);
 
         if (!isRoman && !isArabic) {
-            return "Числа должны быть либо римскими, либо арабскими.";
+            return "Числа должны быть либо римскими, либо арабскими в диапазоне от 1 до 10.";
         }
 
         if (isRoman && isArabic) {
@@ -54,7 +55,6 @@ public class Calculator {
         int number1 = isRoman ? romanToInt(num1) : Integer.parseInt(num1);
         int number2 = isRoman ? romanToInt(num2) : Integer.parseInt(num2);
 
-        // Ограничение на числа больше 10 для римских и арабских цифр
         if (number1 < 1 || number1 > 10 || number2 < 1 || number2 > 10) {
             return "Числа должны быть в диапазоне от 1 до 10 включительно.";
         }
