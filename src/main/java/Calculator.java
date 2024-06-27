@@ -1,11 +1,9 @@
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class Calculator {
-
     private static final Map<Character, Integer> romanToIntMap = new HashMap<>();
-    private static final TreeMap<Integer, String> intToRomanMap = new TreeMap<>();
+    private static final Map<Integer, String> intToRomanMap = new HashMap<>();
 
     static {
         romanToIntMap.put('I', 1);
@@ -31,11 +29,11 @@ public class Calculator {
         intToRomanMap.put(1, "I");
     }
 
-    public static String calc(String input) throws CalculatorException {
+    public static String calc(String input) {
         String[] tokens = input.split(" ");
 
         if (tokens.length != 3) {
-            throw new CalculatorException("Некорректный формат ввода. Ожидается два операнда и один оператор.");
+            return "Некорректный формат ввода. Ожидается два операнда и один оператор.";
         }
 
         String num1 = tokens[0];
@@ -46,18 +44,19 @@ public class Calculator {
         boolean isArabic = isArabicNumeral(num1) && isArabicNumeral(num2);
 
         if (!isRoman && !isArabic) {
-            throw new CalculatorException("Числа должны быть либо римскими, либо арабскими.");
+            return "Числа должны быть либо римскими, либо арабскими.";
         }
 
         if (isRoman && isArabic) {
-            throw new CalculatorException("Нельзя использовать обе системы счисления одновременно.");
+            return "Нельзя использовать обе системы счисления одновременно.";
         }
 
         int number1 = isRoman ? romanToInt(num1) : Integer.parseInt(num1);
         int number2 = isRoman ? romanToInt(num2) : Integer.parseInt(num2);
 
-        if (number1 < 1 || number1 > 3999 || number2 < 1 || number2 > 3999) {
-            throw new CalculatorException("Числа должны быть в диапазоне от 1 до 3999 включительно.");
+        // Ограничение на числа больше 10 для римских и арабских цифр
+        if (number1 < 1 || number1 > 10 || number2 < 1 || number2 > 10) {
+            return "Числа должны быть в диапазоне от 1 до 10 включительно.";
         }
 
         int result;
@@ -73,19 +72,19 @@ public class Calculator {
                 break;
             case "/":
                 if (number2 == 0) {
-                    throw new CalculatorException("Деление на ноль невозможно.");
+                    return "Деление на ноль невозможно.";
                 }
                 result = number1 / number2;
                 break;
             default:
-                throw new CalculatorException("Некорректная операция: " + operator);
+                return "Некорректная операция: " + operator;
         }
 
         return isRoman ? intToRoman(result) : String.valueOf(result);
     }
 
     private static boolean isRomanNumeral(String s) {
-        return s.matches("^[IVXLCDM]+$");
+        return s.matches("[IVXLCDM]+");
     }
 
     private static boolean isArabicNumeral(String s) {
@@ -95,8 +94,10 @@ public class Calculator {
     private static int romanToInt(String roman) {
         int result = 0;
         int prevValue = 0;
+
         for (int i = roman.length() - 1; i >= 0; i--) {
             int value = romanToIntMap.get(roman.charAt(i));
+
             if (value < prevValue) {
                 result -= value;
             } else {
@@ -104,6 +105,7 @@ public class Calculator {
             }
             prevValue = value;
         }
+
         return result;
     }
 
@@ -113,10 +115,10 @@ public class Calculator {
         }
 
         StringBuilder roman = new StringBuilder();
-        for (Integer key : intToRomanMap.descendingKeySet()) {
-            while (num >= key) {
-                roman.append(intToRomanMap.get(key));
-                num -= key;
+        for (Map.Entry<Integer, String> entry : intToRomanMap.entrySet()) {
+            while (num >= entry.getKey()) {
+                roman.append(entry.getValue());
+                num -= entry.getKey();
             }
         }
 

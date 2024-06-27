@@ -5,21 +5,15 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("Введите выражение (например, 'X + X') или 'exit' для завершения: ");
+            System.out.println("Введите выражение (например, 'X + X') или 'exit' для завершения:");
             String input = scanner.nextLine();
 
-            // Проверка на команду выхода
             if (input.equalsIgnoreCase("exit")) {
-                System.out.println("Программа завершена.");
                 break;
             }
 
-            try {
-                String result = Calculator.calc(input);
-                System.out.println("Результат: " + result);
-            } catch (Exception e) {
-                System.out.println("Ошибка: " + e.getMessage());
-            }
+            String result = Calculator.calc(input);
+            System.out.println("Результат: " + result);
         }
 
         scanner.close();
